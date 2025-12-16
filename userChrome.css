@@ -3,7 +3,7 @@
   This style modifies the Firefox UI to provide a Chrome-like tab experience.
   Features:
   - Prevents the tab bar from ever scrolling.
-  - Allows tabs to shrink down to 1px (50px for the active tab).
+  - Allows tabs to shrink down to 1px (70px for the active tab).
   - Centers the favicon on very small tabs for better visibility.
   - Fixes the common "blank space" bug when closing tabs.
   - Preserves tab drag-and-drop shuffle animation.
@@ -43,15 +43,14 @@
     container-name: tab-container;
 }
 
-/* 3b. Active tab: can grow, cannot shrink below 50px */
-.tabbrowser-tab[selected]:not([pinned]),
-.tabbrowser-tab[visuallyselected]:not([pinned]) {
+/* 3b. Active tab: same as others but floor at 50px */
+.tabbrowser-tab[fadein][selected]:not([pinned]),
+.tabbrowser-tab[fadein][visuallyselected]:not([pinned]) {
     min-width: 70px !important;
-    flex: 1 0 auto !important;
 }
 
 /* 4. Conditionally style very small tabs */
-@container tab-container (max-width: 55px) {
+@container tab-container (max-width: 70px) {
     .tab-content {
         padding-inline: 0px !important;
         justify-content: center !important;
