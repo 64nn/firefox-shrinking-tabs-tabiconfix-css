@@ -1,27 +1,35 @@
 /*
   Firefox - Chrome-like Shrinking Tabs
   This style modifies the Firefox UI to provide a Chrome-like tab experience.
-
   Features:
   - Prevents the tab bar from ever scrolling.
-  - Allows tabs to shrink down to 1px.
+  - Allows tabs to shrink down to 1px (50px for the active tab).
   - Centers the favicon on very small tabs for better visibility.
   - Fixes the common "blank space" bug when closing tabs.
-
-  Tested and working on Firefox 140.0.4 (macOS).
+  - Preserves tab drag-and-drop shuffle animation.
+  Tested and working on Firefox 146.0.0 (macOS).
 */
 
-/* 1. ULTIMATE SCROLL & TRANSFORM PREVENTION */
-/* Prevents scrolling by disabling overflow and transform-based sliding on the entire tab bar structure. */
-#TabsToolbar,
-#TabsToolbar * {
+/* 1. PREVENT SCROLLING - TARGET ONLY THE SCROLLBOX */
+#TabsToolbar {
     overflow: hidden !important;
+}
+
+.tabbrowser-arrowscrollbox {
+    overflow: hidden !important;
+}
+
+.tabbrowser-arrowscrollbox > scrollbox,
+.tabbrowser-arrowscrollbox > .arrowscrollbox-overflow-start-indicator,
+.tabbrowser-arrowscrollbox > .arrowscrollbox-overflow-end-indicator {
     transform: none !important;
+}
+
+.tabbrowser-tab {
     min-width: 0 !important;
 }
 
-/* 2. Hide any remaining visual scroll indicators */
-/* Although functionality is disabled, this ensures the buttons are visually gone. */
+/* 2. Hide scroll buttons */
 .tabbrowser-arrowscrollbox > .scrollbutton-up,
 .tabbrowser-arrowscrollbox > .scrollbutton-down,
 .tabbrowser-scrollbox-overflow-indicator {
@@ -29,27 +37,31 @@
 }
 
 /* 3. Force tabs to shrink & DEFINE THE TAB AS A CONTAINER */
-/* Allows tabs to shrink below the default minimum and defines each tab as a queryable container. */
 .tabbrowser-tab[fadein]:not([pinned]) {
     min-width: 1px !important;
     container-type: inline-size;
     container-name: tab-container;
 }
 
+/* 3b. Active tab: can grow, cannot shrink below 50px */
+.tabbrowser-tab[selected]:not([pinned]),
+.tabbrowser-tab[visuallyselected]:not([pinned]) {
+    min-width: 70px !important;
+    flex: 1 0 auto !important;
+}
+
 /* 4. Conditionally style very small tabs */
-/* Uses a Container Query to apply styles only when a tab's width is less than 55px. */
 @container tab-container (max-width: 55px) {
     .tab-content {
         padding-inline: 0px !important;
-        justify-content: center !important; /* Centers the content (the icon) */
+        justify-content: center !important;
     }
     .tab-icon-image {
-        margin-inline: 0px !important; /* Resets margin to allow for perfect centering */
+        margin-inline: 0px !important;
     }
 }
 
 /* 5. Keep the proven "graceful close" to prevent the blank space bug */
-/* A small transition gives Firefox's layout engine time to adjust, preventing graphical glitches. */
 .tabbrowser-tab[closing] {
     min-width: 0px !important;
     max-width: 0px !important;
