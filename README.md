@@ -1,1 +1,1 @@
-fixed some stuff with the x button and website icon going too far off of the tab, removed sound icon too because it also had the same issue (first fork, sorry if its bad) 
+fixed some stuff with the x button and website icon going too far off of the tab, removed sound icon too because it also had the same issue, i would've kept it but this is vibecoded, so its obviously not great, but i tried
